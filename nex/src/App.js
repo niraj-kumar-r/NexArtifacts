@@ -14,7 +14,7 @@ function App() {
         <Routes>
           {/* Main layout route with common components */}
           <Route path="/"element={<>
-          <Header /><Feature /><About image={aboutimage} title="Comes with all you need for daily life" button="Get the Website" /><Contact />
+          <Header /><Feature /><About image={aboutimage} title="About" button="Get the Website" /><Contact />
               </>
             }
           />
