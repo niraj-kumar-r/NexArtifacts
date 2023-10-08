@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, ReactElement } from "react";
-import ReactDOM from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import { Spinner, Text } from "@chakra-ui/react";
 import "./Map.css";
@@ -19,6 +19,7 @@ const render = (status) => {
 
 const astorPlace = { lat: 40.729884, lng: -73.990988 };
 const mapOptions = {
+    mapId: process.env.REACT_APP_GOOGLE_MAPS_ID,
     zoom: 18,
     center: astorPlace,
 };
@@ -65,7 +66,7 @@ function Artifacts({ map }) {
                     key={key}
                     position={artifact.position}
                 >
-                    <div>
+                    <div className="marker">
                         <h2>{artifact.name}</h2>
                     </div>
                 </ArtifactMarker>
@@ -80,8 +81,21 @@ function ArtifactMarker({ children, map, position }) {
     useEffect(() => {
         if (!rootRef.current) {
             const container = document.createElement("div");
+            rootRef.current = createRoot(container);
+            // Different from what was in the docs
+            markerRef.current =
+                new window.google.maps.marker.AdvancedMarkerElement({
+                    position,
+                    content: container,
+                });
         }
     }, []);
+
+    useEffect(() => {
+        rootRef.current.render(children);
+        markerRef.current.position = position;
+        markerRef.current.map = map;
+    }, [children, map, position]);
 }
 
 function Map() {
