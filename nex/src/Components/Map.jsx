@@ -2,7 +2,12 @@ import React, { useEffect, useRef, useState, ReactElement } from "react";
 import { createRoot } from "react-dom/client";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import { Spinner, Text } from "@chakra-ui/react";
+import { ThreeCanvas } from "./Canvas";
+import { Canvas } from "@react-three/fiber";
+import { Html, Sparkles, Stars } from "@react-three/drei";
+import { Model } from "./Canvas";
 import "./Map.css";
+import { Pin } from "./Pin";
 
 const render = (status) => {
     switch (status) {
@@ -67,7 +72,7 @@ function Artifacts({ map }) {
                     position={artifact.position}
                 >
                     <div className="marker">
-                        <h2>{artifact.name}</h2>
+                        <ThreeCanvas />
                     </div>
                 </ArtifactMarker>
             ))}
