@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { OrbitControls, Stars } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 
 export function Model() {
     const modelPath = "pin.gltf"; // Replace with the path to your 3D model file.

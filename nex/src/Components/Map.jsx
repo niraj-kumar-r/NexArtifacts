@@ -1,116 +1,130 @@
-import React, { useEffect, useRef, useState, ReactElement } from "react";
-import { createRoot } from "react-dom/client";
-import { Wrapper, Status } from "@googlemaps/react-wrapper";
-import { Spinner, Text } from "@chakra-ui/react";
-import { ThreeCanvas } from "./Canvas";
-import { Canvas } from "@react-three/fiber";
-import { Html, Sparkles, Stars } from "@react-three/drei";
-import { Model } from "./Canvas";
+import React, { useEffect, useRef, useState } from "react";
+import { Wrapper } from "@googlemaps/react-wrapper";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import {
+    PerspectiveCamera,
+    Scene,
+    AmbientLight,
+    DirectionalLight,
+    WebGLRenderer,
+    Matrix4,
+} from "three";
 import "./Map.css";
-import { Pin } from "./Pin";
 
-const render = (status) => {
-    switch (status) {
-        case Status.LOADING:
-            return <Spinner />;
-        case Status.FAILURE:
-            return <Text>Failed to load Google Maps</Text>;
-        case Status.SUCCESS:
-            return <MyMapComponent />;
-        default:
-            return <Spinner />;
-    }
-};
-
-const astorPlace = { lat: 40.729884, lng: -73.990988 };
+const center = { lat: 27.17445, lng: 78.0421 };
 const mapOptions = {
     mapId: process.env.REACT_APP_GOOGLE_MAPS_ID,
     zoom: 18,
-    center: astorPlace,
+    center: center,
+    // disableDefaultUI: true,
+    heading: 25,
+    tilt: 60,
 };
 
 function MyMapComponent() {
-    const [map, setMap] = useState(null);
+    const [map, setMap] = useState();
     const ref = useRef();
+    const overlayRef = useRef();
 
     useEffect(() => {
-        setMap(new window.google.maps.Map(ref.current, mapOptions));
-    }, []);
-
-    return (
-        <>
-            <div ref={ref} id="map" />
-            {map && <Artifacts map={map} />}
-        </>
-    );
-}
-
-const artifactsData = {
-    A: {
-        name: "Niraj",
-        position: { lat: 40.729681, lng: -73.991138 },
-    },
-    B: {
-        name: "Shafi",
-        position: { lat: 40.730031, lng: -73.991428 },
-    },
-    C: {
-        name: "Srinivas",
-        position: { lat: 40.729559, lng: -73.990741 },
-    },
-};
-
-function Artifacts({ map }) {
-    const [data, setData] = useState(artifactsData);
-
-    return (
-        <>
-            {Object.entries(data).map(([key, artifact]) => (
-                <ArtifactMarker
-                    map={map}
-                    key={key}
-                    position={artifact.position}
-                >
-                    <div className="marker">
-                        <ThreeCanvas />
-                    </div>
-                </ArtifactMarker>
-            ))}
-        </>
-    );
-}
-
-function ArtifactMarker({ children, map, position }) {
-    const markerRef = useRef();
-    const rootRef = useRef();
-    useEffect(() => {
-        if (!rootRef.current) {
-            const container = document.createElement("div");
-            rootRef.current = createRoot(container);
-            // Different from what was in the docs
-            markerRef.current =
-                new window.google.maps.marker.AdvancedMarkerElement({
-                    position,
-                    content: container,
-                });
+        if (!overlayRef.current) {
+            console.log("creating overlay");
+            const instance = new window.google.maps.Map(
+                ref.current,
+                mapOptions
+            );
+            setMap(instance);
+            console.log("map created");
+            overlayRef.current = createOverlay(instance);
         }
     }, []);
 
-    useEffect(() => {
-        rootRef.current.render(children);
-        markerRef.current.position = position;
-        markerRef.current.map = map;
-    }, [children, map, position]);
+    return <div ref={ref} id="map" />;
+}
+
+function createOverlay(map) {
+    // eslint-disable-next-line no-undef
+    const overlay = new google.maps.WebGLOverlayView();
+    let renderer, scene, camera, loader;
+
+    overlay.onAdd = () => {
+        scene = new Scene();
+        camera = new PerspectiveCamera();
+        const light = new AmbientLight(0xffffff, 0.9);
+        // add directional light
+        const directionalLight = new DirectionalLight(0xffffff, 0.9);
+        directionalLight.position.set(10, 10, 10);
+        scene.add(directionalLight);
+        scene.add(light);
+
+        loader = new GLTFLoader();
+        loader.loadAsync("/low_poly/scene.gltf").then((object) => {
+            console.log("loaded", object);
+            const group = object.scene;
+            group.scale.setScalar(25);
+            group.rotation.set(Math.PI / 2, 0, 0);
+            group.position.setZ(-120);
+            scene.add(group);
+        });
+    };
+
+    overlay.onContextRestored = ({ gl }) => {
+        renderer = new WebGLRenderer({
+            canvas: gl.canvas,
+            context: gl,
+            ...gl.getContextAttributes(),
+        });
+        renderer.autoClear = false;
+
+        loader.manager.onLoad = () => {
+            renderer.setAnimationLoop(() => {
+                map.moveCamera({
+                    tilt: mapOptions.tilt,
+                    heading: mapOptions.heading,
+                    zoom: mapOptions.zoom,
+                });
+
+                if (mapOptions.tilt < 60) {
+                    mapOptions.tilt += 0.5;
+                } else if (mapOptions.zoom < 20) {
+                    mapOptions.zoom += 0.05;
+                } else if (mapOptions.heading < 125) {
+                    mapOptions.heading += 0.5;
+                } else {
+                    renderer.setAnimationLoop(null);
+                }
+            });
+        };
+    };
+
+    overlay.onDraw = ({ transformer }) => {
+        const matrix = transformer.fromLatLngAltitude({
+            lat: mapOptions.center.lat,
+            lng: mapOptions.center.lng,
+            altitude: 120,
+        });
+        camera.projectionMatrix = new Matrix4().fromArray(matrix);
+
+        overlay.requestRedraw();
+        renderer.render(scene, camera);
+        renderer.resetState();
+    };
+
+    overlay.setMap(map);
+
+    return overlay;
 }
 
 function Map() {
     return (
         <Wrapper
             apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
-            version="beta"
-            libraries={["marker", "streetView"]}
-            render={render}
-        />
+            // version="beta"
+            // libraries={["marker", "streetView"]}
+            // render={render}
+        >
+            <MyMapComponent />
+        </Wrapper>
     );
 }
 
