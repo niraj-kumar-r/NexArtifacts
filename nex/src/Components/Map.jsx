@@ -12,6 +12,9 @@ import {
 import "./Map.css";
 
 const center = { lat: 27.17445, lng: 78.0421 };
+// const center = { lat: 18.922, lng: 72.8347 };
+const modelInitialScale = 10000;
+
 const mapOptions = {
     mapId: process.env.REACT_APP_GOOGLE_MAPS_ID,
     zoom: 1,
@@ -63,7 +66,7 @@ function createOverlay(map) {
             console.log("loaded", object);
             const group = object.scene;
             groupObject = group;
-            group.scale.setScalar(5000);
+            group.scale.setScalar(modelInitialScale);
             group.rotation.set(Math.PI / 2, 0, 0);
             group.position.setZ(-120);
             scene.add(group);
@@ -87,7 +90,9 @@ function createOverlay(map) {
                 });
                 if (groupObject) {
                     const currScale =
-                        ((mapOptions.zoom - 6) / (20 - 6)) * (25 - 5000) + 5000;
+                        ((mapOptions.zoom - 6) / (20 - 6)) *
+                            (25 - modelInitialScale) +
+                        modelInitialScale;
                     // ((90000 - 25) / (6 - 20)) * mapOptions.zoom + 150000;
                     groupObject.scale.setScalar(currScale);
                 }
@@ -116,6 +121,9 @@ function createOverlay(map) {
         renderer.render(scene, camera);
         renderer.resetState();
     };
+
+    // eslint-disable-next-line no-undef
+    // const infoWindow = new google.maps.InfoWindow();
 
     overlay.setMap(map);
 
