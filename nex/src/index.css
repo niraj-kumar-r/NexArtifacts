@@ -126,10 +126,10 @@ nav .menu-btn,
     border-radius: 10px;
     color: #ffffff;
 }
-.cv-btn:hover {
-    background-color: #0099ff;
-    transition: all ease 0.5s;
-    color: #ffffff;
+.cv-btn:hover{
+background-color: #1900ff;
+  transition: all ease 0.5s;
+  color: #ffffff;
 }
 
 .f-heading h1 {
@@ -213,6 +213,11 @@ nav .menu-btn,
     padding-top: 40px;
     background-color: #ffffff;
 }
+.a-container{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+
 .a-container {
     display: flex;
     justify-content: center;
