@@ -14,10 +14,10 @@ import "./Map.css";
 const center = { lat: 27.17445, lng: 78.0421 };
 const mapOptions = {
     mapId: process.env.REACT_APP_GOOGLE_MAPS_ID,
-    zoom: 18,
+    zoom: 1,
     center: center,
     // disableDefaultUI: true,
-    heading: 25,
+    heading: 0,
     tilt: 60,
 };
 
@@ -46,6 +46,7 @@ function createOverlay(map) {
     // eslint-disable-next-line no-undef
     const overlay = new google.maps.WebGLOverlayView();
     let renderer, scene, camera, loader;
+    let groupObject;
 
     overlay.onAdd = () => {
         scene = new Scene();
@@ -61,7 +62,8 @@ function createOverlay(map) {
         loader.loadAsync("/low_poly/scene.gltf").then((object) => {
             console.log("loaded", object);
             const group = object.scene;
-            group.scale.setScalar(25);
+            groupObject = group;
+            group.scale.setScalar(5000);
             group.rotation.set(Math.PI / 2, 0, 0);
             group.position.setZ(-120);
             scene.add(group);
@@ -83,7 +85,12 @@ function createOverlay(map) {
                     heading: mapOptions.heading,
                     zoom: mapOptions.zoom,
                 });
-
+                if (groupObject) {
+                    const currScale =
+                        ((mapOptions.zoom - 6) / (20 - 6)) * (25 - 5000) + 5000;
+                    // ((90000 - 25) / (6 - 20)) * mapOptions.zoom + 150000;
+                    groupObject.scale.setScalar(currScale);
+                }
                 if (mapOptions.tilt < 60) {
                     mapOptions.tilt += 0.5;
                 } else if (mapOptions.zoom < 20) {
