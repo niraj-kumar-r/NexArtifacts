@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./Components/Header";
 import Feature from "./Components/Feature";
 import About from "./Components/About";
-import aboutimage from "./images/About.png";
+import aboutimage from "./images/3d-fluency-map-marker.png";
 import Contact from "./Components/Contact";
 import Map from "./Components/Map"; // Import the Hello component
 import { ChakraProvider } from "@chakra-ui/react";
@@ -20,13 +20,8 @@ function App() {
                             element={
                                 <>
                                     <Header />
-                                    <Feature 
-                                     title="Features"
-                                    />
-                                    <About
-                                        image={aboutimage}
-                                        title="About"
-                                    />
+                                    <Feature title="Features" />
+                                    <About image={aboutimage} title="About" />
                                     <Contact />
                                 </>
                             }

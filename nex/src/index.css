@@ -24,9 +24,8 @@ input {
     outline: none;
     border: none;
 }
-.logo img{
-  
-  width: 220px;
+.logo img {
+    width: 220px;
 }
 #main {
     width: 100%;
@@ -34,7 +33,9 @@ input {
     position: relative;
     background-repeat: no-repeat;
     background-size: cover;
-    background-image: url("./images/background.png");
+    /* background-image: url("./images/background.png"); */
+    background-image: url("images/bg-hero-desktop.svg");
+    /* background-color: hsl(193, 100%, 96%); */
 }
 nav {
     display: flex;
@@ -86,6 +87,13 @@ nav .menu-btn,
 .menu-icon {
     display: none;
 }
+
+#my-pic {
+    position: absolute;
+    margin-left: 70%;
+    margin-top: 15vh;
+}
+
 .name {
     font-family: "Montserrat";
     width: 500px;
@@ -153,7 +161,7 @@ nav .menu-btn,
 #about {
     margin-top: 100px;
     width: 100%;
-    height: 120vh;
+    height: 60vh;
     background-color: #f3fdff;
     box-sizing: border-box;
     display: flex;
@@ -197,9 +205,12 @@ nav .menu-btn,
 }
 .about-image {
     width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .about-image img {
-    width: 600px;
+    width: 400px;
 }
 
 #features {
@@ -222,7 +233,7 @@ nav .menu-btn,
 .a-box {
     background-color: #ffffff;
     width: 300px;
-    height: 450px;
+    /* height: 450px; */
     margin: 20px;
     border-radius: 10px;
     overflow: hidden;
@@ -324,8 +335,9 @@ nav .menu-btn,
     display: block;
     display: -webkit-box;
     max-width: 80%;
+    height: 200px;
     margin-top: 25px;
-    -webkit-line-clamp: 4;
+    /* -webkit-line-clamp: 4; */
     -webkit-box-orient: vertical;
     overflow-y: auto;
     overflow-x: hidden;
@@ -399,6 +411,10 @@ nav .menu-btn,
     background-color: #0099ff;
 }
 @media (max-width: 1190px) {
+    #my-pic {
+        display: none;
+    }
+
     #main {
         background-size: 1150px !important;
     }
