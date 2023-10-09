@@ -72,4 +72,4 @@ We welcome contributions from the community! If you have suggestions for improve
 
 ## License
 
-Our 3D Map Visualization Website is licensed under the MIT License. Please see the LICENSE file in our GitHub repository for more details.
+Our 3D Map Visualization Website is licensed under the GPL3 License. Please see the LICENSE file in our GitHub repository for more details.
