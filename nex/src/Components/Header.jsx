@@ -9,7 +9,7 @@ function Header() {
         <div id='main'>
          <Navbar />         
             <div className='name'>
-                <h1><span>Start Exporing the Website</span></h1>
+                <h1><span>Ready to Explore 3D Artifacts in Street View?</span> Let's Begin Our Journey</h1>
                 <Link to="/map" className='cv-btn'>Start Explore</Link>
             </div>    
                     
