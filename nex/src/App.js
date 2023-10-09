@@ -20,11 +20,12 @@ function App() {
                             element={
                                 <>
                                     <Header />
-                                    <Feature />
+                                    <Feature 
+                                     title="Features"
+                                    />
                                     <About
                                         image={aboutimage}
                                         title="About"
-                                        button="Get the Website"
                                     />
                                     <Contact />
                                 </>
