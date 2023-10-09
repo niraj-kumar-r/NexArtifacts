@@ -11,8 +11,8 @@ import {
 } from "three";
 import "./Map.css";
 
-// const center = { lat: 27.17445, lng: 78.0421 };
-const center = { lat: 18.922, lng: 72.8347 };
+const center = { lat: 27.17445, lng: 78.0421 };
+// const center = { lat: 18.922, lng: 72.8347 };
 const modelInitialScale = 10000;
 
 const mapOptions = {

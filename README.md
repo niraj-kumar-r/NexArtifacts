@@ -39,6 +39,14 @@ To host our website locally, follow these steps:
 1. Clone our GitHub repository to your local machine.
 2. cd into the nex directory.
 3. Run `npm install` to install all dependencies.
+4. make a .env file and copy the contents of .env.example into it.
+5. Replace the value of the REACT_APP_GOOGLE_MAPS_API_KEY variable with your own Google Maps API key.
+   (Note: You will need a Google maps platform account with a billing account to get an API key, and then enable the Maps JavaScript API.
+   For more info visit : https://developers.google.com/maps/documentation/javascript/cloud-setup)
+6. Replace the REACT_APP_GOOGLE_MAPS_ID variable with your own Google Maps ID.
+   (Note: Make sure to use a vector map with tilt and rotation enabled.
+   For more info visit : https://developers.google.com/maps/documentation/javascript/webgl)
+7. Run `npm start` to start the server.
 
 ## How to Use
 
@@ -47,15 +55,16 @@ Using our website is simple and intuitive:
 1. Navigate to the website URL.
 2. Use your mouse or touchpad to pan around the map.
 3. Use the zoom in/out buttons to get a closer look or a wider view.
-4. Use the tilt button to change the viewing angle.
+4. Hold the shift button and use mouse or arrow buttons to change the viewing angle.
 
 ## Future Enhancements
 
 We are constantly working on improving our website and adding new features. Some future enhancements we are considering include:
 
 1. Adding more detailed textures to our 3D models.
-2. Incorporating real-time data such as weather and traffic conditions.
-3. Providing options for customizing the appearance of the map.
+2. Incorporating real-life data to the artifacts.
+3. Adding more artifacts to the map.
+4. Adding info boxes to the artifacts.
 
 ## Contributing
 
