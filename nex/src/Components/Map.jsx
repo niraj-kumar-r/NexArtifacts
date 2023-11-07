@@ -1,49 +1,90 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Wrapper } from "@googlemaps/react-wrapper";
+import { Wrapper, Marker } from "@googlemaps/react-wrapper"; // Import Marker component
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import {
-    PerspectiveCamera,
-    Scene,
-    AmbientLight,
-    DirectionalLight,
-    WebGLRenderer,
-    Matrix4,
+  PerspectiveCamera,
+  Scene,
+  AmbientLight,
+  DirectionalLight,
+  WebGLRenderer,
+  Matrix4,
 } from "three";
 import "./Map.css";
 
-const center = { lat: 27.17445, lng: 78.0421 };
-// const center = { lat: 18.922, lng: 72.8347 };
+const initialCenter = { lat: 48.8584, lng: 2.2945 }; // Set a neutral initial center
 const modelInitialScale = 10000;
 
 const mapOptions = {
-    mapId: process.env.REACT_APP_GOOGLE_MAPS_ID,
-    zoom: 1,
-    center: center,
-    // disableDefaultUI: true,
-    heading: 0,
-    tilt: 60,
+  mapId: process.env.REACT_APP_GOOGLE_MAPS_ID,
+  zoom: 1,
+  center: initialCenter, // Set the initial center to be neutral
+  heading: 0,
+  tilt: 60,
 };
 
-function MyMapComponent() {
-    const [map, setMap] = useState();
+
+const markerCoordinates = [
+    { lat: 27.17445, lng: 78.0421 }, // Coordinate 1
+    { lat:17.3616 , lng:  78.4747  }, // Coordinate 2
+    {lat: 48.8584, lng: 2.2945 }, // Coordinate 3
+    // Add more coordinates as needed
+  ];
+  
+  function MyMapComponent() {
+    const [map, setMap] = useState(null); // Initialize map as null
     const ref = useRef();
     const overlayRef = useRef();
-
+    const markerRefs = []; // Refs for the markers
+  
     useEffect(() => {
-        if (!overlayRef.current) {
-            console.log("creating overlay");
-            const instance = new window.google.maps.Map(
-                ref.current,
-                mapOptions
-            );
-            setMap(instance);
-            console.log("map created");
-            overlayRef.current = createOverlay(instance);
-        }
+      if (!overlayRef.current) {
+        console.log("creating overlay");
+        const instance = new window.google.maps.Map(ref.current, mapOptions);
+        setMap(instance); // Update map when created
+        console.log("map created");
+        overlayRef.current = createOverlay(instance);
+  
+        // Create markers for each coordinate
+        markerCoordinates.forEach((coordinate, index) => {
+          const marker = new window.google.maps.Marker({
+            position: coordinate,
+            map: instance,
+          });
+  
+          // Create an InfoWindow for this marker
+          const infoWindow = new window.google.maps.InfoWindow({
+            content: `<button onclick="navigate(${coordinate.lat}, ${coordinate.lng})">Let's go</button>`, // Content to display when the marker is clicked
+          });
+  
+          // Add a click event listener to each marker to open the InfoWindow
+          marker.addListener("click", () => {
+            infoWindow.open(instance, marker); // Open the InfoWindow
+  
+            // Ensure the InfoWindow is correctly positioned
+            infoWindow.setPosition(coordinate);
+          });
+  
+          markerRefs[index] = marker; // Store the marker reference
+        });
+      }
     }, []);
-
+  
+    // Define the navigate function in the global scope
+    window.navigate = (lat, lng) => {
+        if (map) {
+          const newCenter = new window.google.maps.LatLng(lat, lng);
+          map.panTo(newCenter);
+          map.setZoom(600); // Adjust the zoom level as needed (15 is an example)
+        }
+      };
+  
     return <div ref={ref} id="map" />;
-}
+  }
+  
+  
+  
+  
+
 
 function createOverlay(map) {
     // eslint-disable-next-line no-undef
@@ -132,15 +173,15 @@ function createOverlay(map) {
 
 function Map() {
     return (
-        <Wrapper
-            apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
-            // version="beta"
-            // libraries={["marker", "streetView"]}
-            // render={render}
-        >
-            <MyMapComponent />
-        </Wrapper>
+      <Wrapper
+        apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
+        // version="beta"
+        // libraries={["marker", "streetView"]}
+        // render={render}
+      >
+        <MyMapComponent />
+      </Wrapper>
     );
-}
+  }
 
 export default Map;
