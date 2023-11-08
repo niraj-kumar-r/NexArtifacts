@@ -29,6 +29,25 @@ const markerCoordinates = [
     {lat: 48.8584, lng: 2.2945 }, // Coordinate 3
     // Add more coordinates as needed
   ];
+
+  const placeInformation = [
+    {
+      name: "Taj Mahal",
+      description: "The Taj Mahal is an ivory-white marble mausoleum on the right bank of the Yamuna river in the Indian city of Agra.",
+      imageUrl: "URL_TO_TAJ_MAHAL_IMAGE", // Replace with the URL of an image for the place
+    },
+    {
+      name: "Charminar",
+      description: "The Charminar is a monument and mosque located in Hyderabad, Telangana, India. The landmark has become a global icon of Hyderabad, listed among the most recognized structures of India.",
+      imageUrl: "URL_TO_OTHER_IMAGE", // Replace with the URL of an image for the place
+    },
+    {
+      name: "Eiffel Tower",
+      description: "The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France. It is named after the engineer Gustave Eiffel, whose company designed and built the tower",
+      imageUrl: "URL_TO_ANOTHER_IMAGE", // Replace with the URL of an image for the place
+    }
+  ];
+  
   
   function MyMapComponent() {
     const [map, setMap] = useState(null); // Initialize map as null
@@ -51,21 +70,28 @@ const markerCoordinates = [
             map: instance,
           });
   
+          
           // Create an InfoWindow for this marker
           const infoWindow = new window.google.maps.InfoWindow({
-            content: `<button onclick="navigate(${coordinate.lat}, ${coordinate.lng})">Let's go</button>`, // Content to display when the marker is clicked
+            content: `
+              
+              <h2>${placeInformation[index].name}</h2>
+              <p>${placeInformation[index].description}</p>
+              <img src="${placeInformation[index].imageUrl}" alt="${placeInformation[index].name}" />              
+              <button onclick="navigate(${coordinate.lat}, ${coordinate.lng})">Let's go</button>
+            `,
           });
   
-          // Add a click event listener to each marker to open the InfoWindow
-          marker.addListener("click", () => {
-            infoWindow.open(instance, marker); // Open the InfoWindow
-  
-            // Ensure the InfoWindow is correctly positioned
-            infoWindow.setPosition(coordinate);
-          });
-  
-          markerRefs[index] = marker; // Store the marker reference
-        });
+  // Add a click event listener to each marker to open the InfoWindow
+  marker.addListener("click", () => {
+    infoWindow.open(instance, marker); // Open the InfoWindow
+
+    // Ensure the InfoWindow is correctly positioned
+    infoWindow.setPosition(coordinate);
+  });
+
+  markerRefs[index] = marker; // Store the marker reference
+});
       }
     }, []);
   
