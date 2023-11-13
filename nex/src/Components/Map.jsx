@@ -95,18 +95,17 @@ function MyMapComponent() {
                 });
 
                 // Create an InfoWindow for this marker
-// Inside the marker.addListener block in MyMapComponent
-const infoWindow = new window.google.maps.InfoWindow({
-    content: `
-      <div class="info-container">
-        <h2>${placeInformation[index].name}</h2>
-        <p>${placeInformation[index].description}</p>
-        <img src="${placeInformation[index].imageUrl}" alt="${placeInformation[index].name}" />
-        <button onclick="navigate(${coordinate.lat}, ${coordinate.lng})">Let's go</button>
-      </div>
-    `,
-  });
-  
+                // Inside the marker.addListener block in MyMapComponent
+                const infoWindow = new window.google.maps.InfoWindow({
+                    content: `
+                              <div class="info-container">
+                                <h2>${placeInformation[index].name}</h2>
+                                <p>${placeInformation[index].description}</p>
+                                <img src="${placeInformation[index].imageUrl}" alt="${placeInformation[index].name}" />
+                                <button onclick="navigate(${coordinate.lat}, ${coordinate.lng})">Let's go</button>
+                              </div>
+                            `,
+                });
 
                 // Add a click event listener to each marker to open the InfoWindow
                 marker.addListener("click", () => {
@@ -151,18 +150,24 @@ function createOverlay(map) {
             const group = object.scene;
             group.scale.setScalar(place.modelScale);
             group.rotation.set(...Object.values(place.modelRotation));
-            group.position.copy(
-                overlay.latLngAltitudeToVector3(place.modelCoordinates)
-            );
+            const pos = overlay.latLngAltitudeToVector3(place.modelCoordinates);
+            group.position.copy(pos);
             overlay.scene.add(group);
+            const directionalLight = new DirectionalLight(0xffffff, 0.1);
+            directionalLight.position.set(
+                pos.x + 1000,
+                pos.y + 1000,
+                pos.z + 1000
+            );
+            overlay.scene.add(directionalLight);
         });
     });
 
     overlay.scene.add(new AmbientLight(0xffffff, 0.9));
     // add directional light
-    const directionalLight = new DirectionalLight(0xffffff, 0.9);
-    directionalLight.position.set(100, 100, 100);
-    overlay.scene.add(directionalLight);
+    // const directionalLight = new DirectionalLight(0xffffff, 0.9);
+    // directionalLight.position.set(100, 100, 100);
+    // overlay.scene.add(directionalLight);
 
     // overlay.onAdd = () => {
     //     scene = new Scene();
