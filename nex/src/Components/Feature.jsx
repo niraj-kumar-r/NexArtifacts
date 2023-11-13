@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
 import FeatureBox from "./FeatureBox";
-import featureimage from "../images/feature_1.png";
-import featureimage2 from "../images/feature_2.png";
-import featureimage3 from "../images/feature_3.png";
+import featureimage from "../images/showcase.jpg";
+import featureimage2 from "../images/streetview.jpg";
+import featureimage3 from "../images/showcase.jpg";
+import featureimage4 from "../images/rotation.jpg";
 
 function Feature() {
     const featuresRef = useRef(null);
@@ -67,7 +68,7 @@ function Feature() {
                     description=" Showcase artifacts from different locations or regions. When users click on an artifact, they can view detailed information about it, such as its history, origin, and significance."
                 />
                 <FeatureBox
-                    image={featureimage3}
+                    image={featureimage4}
                     title={
                         <span
                             style={{
