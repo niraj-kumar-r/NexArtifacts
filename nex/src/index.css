@@ -171,6 +171,8 @@ nav .menu-btn,
     position: relative;
 }
 
+
+
 .about-text {
     width: 45%;
     color: #fff;
@@ -178,7 +180,8 @@ nav .menu-btn,
 }
 .about-text h2 {
     font-size: 2rem;
-    color: #00b7ff;
+    font-weight: bold;
+    color: #10465c;
     font-weight: 500;
     margin: 0px;
     padding: 0px;
@@ -364,7 +367,7 @@ nav .menu-btn,
 }
 
 #contact {
-    background-color: #cfe3eb;
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
     justify-content: center;
