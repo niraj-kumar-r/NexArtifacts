@@ -1,19 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Wrapper } from "@googlemaps/react-wrapper"; // Import Marker component
+import { Wrapper, Marker } from "@googlemaps/react-wrapper"; // Import Marker component
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import * as THREE from "three";
 import {
-    // PerspectiveCamera,
-    // Scene,
+    PerspectiveCamera,
+    Scene,
     AmbientLight,
     DirectionalLight,
-    // WebGLRenderer,dd
-    // Matrix4,
+    WebGLRenderer,
+    Matrix4,
 } from "three";
-import { ThreeJSOverlayView } from "@googlemaps/three";
+import { ThreeJSOverlayView, latLngToVector3Relative } from "@googlemaps/three";
 import "./Map.css";
 
 const initialCenter = { lat: 27.17445, lng: 78.0421 }; // Set a neutral initial center
-// const modelInitialScale = 25;
+const modelInitialScale = 25;
 
 const mapOptions = {
     mapId: process.env.REACT_APP_GOOGLE_MAPS_ID,
@@ -21,49 +22,45 @@ const mapOptions = {
     center: initialCenter, // Set the initial center to be neutral
     heading: 0,
     tilt: 60,
-    labels: false,
 };
+
+const markerCoordinates = [
+    { lat: 27.17445, lng: 78.0421 }, // Coordinate 1
+    { lat: 17.3616, lng: 78.4747 }, // Coordinate 2
+    { lat: 48.8584, lng: 2.2945 }, // Coordinate 3
+    // Add more coordinates as needed
+];
 
 const placeInformation = [
     {
         model: "/taj_mahal_3d_model/scene.gltf",
-        modelScale: 0.19,
-        modelRotation: { x: Math.PI / 2, y: -0.01, z: 0 },
-        modelCoordinates: { lat: 27.175, lng: 78.042128 },
+        modelScale: 0.2,
+        modelRotation: { x: Math.PI / 2, y: 0, z: 0 },
+        modelCoordinates: { lat: 27.1745, lng: 78.0421 },
         name: "Taj Mahal",
         description:
             "The Taj Mahal is an ivory-white marble mausoleum on the right bank of the Yamuna river in the Indian city of Agra.",
         imageUrl: "/images/tajMahal.jpg", // Replace with the URL of an image for the place
     },
     {
-        model: "/charminar_hyderabad/scene.gltf",
-        modelScale: 12,
-        modelRotation: { x: Math.PI / 2, y: Math.PI, z: 0 },
-        modelCoordinates: { lat: 17.3619, lng: 78.47465 },
+        model: "/low_poly/scene.gltf",
+        modelScale: 25,
+        modelRotation: { x: Math.PI / 2, y: 0, z: 0 },
+        modelCoordinates: { lat: 17.3616, lng: 78.4747 },
         name: "Charminar",
         description:
             "The Charminar is a monument and mosque located in Hyderabad, Telangana, India. The landmark has become a global icon of Hyderabad, listed among the most recognized structures of India.",
-        imageUrl: "/images/charminar.jpg", // Replace with the URL of an image for the place
+        imageUrl: "URL_TO_OTHER_IMAGE", // Replace with the URL of an image for the place
     },
     {
-        model: "/eiffel_tower/scene.gltf",
-        modelScale: 16,
-        modelRotation: { x: Math.PI / 2, y: Math.PI / 4, z: 0 },
-        modelCoordinates: { lat: 48.8576, lng: 2.2945, altitude: 40 },
+        model: "krishna_muec/scene.gltf",
+        modelScale: 150,
+        modelRotation: { x: Math.PI / 2, y: 0, z: 0 },
+        modelCoordinates: { lat: 48.8584, lng: 2.2945, altitude: 40 },
         name: "Eiffel Tower",
         description:
             "The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France. It is named after the engineer Gustave Eiffel, whose company designed and built the tower",
-        imageUrl: "/images/eiffel_tower.jpg", // Replace with the URL of an image for the place
-    },
-    {
-        model: "/pyramid/scene.gltf",
-        modelScale: 17,
-        modelRotation: { x: Math.PI / 2, y: 0, z: 0 },
-        modelCoordinates: { lat: 29.9759, lng: 31.1307 },
-        name: "Pyramid of Khafre",
-        description:
-            "The Pyramid of Khafre, located on the Giza Plateau in Egypt, is the second-largest of the Giza Pyramids and is characterized by its distinctive limestone cap and the Great Sphinx guarding its base. Built during the Fourth Dynasty of the Old Kingdom, it is a testament to ancient Egyptian architectural prowess and served as a funerary monument for Pharaoh Khafre",
-        imageUrl: "/images/pyramid.jpg", // Replace with the URL of an image for the place
+        imageUrl: "URL_TO_ANOTHER_IMAGE", // Replace with the URL of an image for the place
     },
 ];
 
@@ -72,6 +69,7 @@ function MyMapComponent() {
     const ref = useRef();
     const overlayRef = useRef();
     const markerRefs = []; // Refs for the markers
+    const openInfoWindowRef = useRef(null);
 
     useEffect(() => {
         if (!overlayRef.current) {
@@ -86,33 +84,34 @@ function MyMapComponent() {
             console.log("overlay created");
 
             // Create markers for each coordinate
-            placeInformation.forEach((place, index) => {
-                const coordinate = place.modelCoordinates;
+            markerCoordinates.forEach((coordinate, index) => {
                 const marker = new window.google.maps.Marker({
                     position: coordinate,
                     map: instance,
-                    // icon: place.imageUrl,
                 });
 
                 // Create an InfoWindow for this marker
-                // Inside the marker.addListener block in MyMapComponent
                 const infoWindow = new window.google.maps.InfoWindow({
                     content: `
-                              <div class="info-container">
-                                <h2>${placeInformation[index].name}</h2>
-                                <p>${placeInformation[index].description}</p>
-                                <img src="${placeInformation[index].imageUrl}" alt="${placeInformation[index].name}" />
-                                <button onclick="navigate(${coordinate.lat}, ${coordinate.lng})">Let's go</button>
-                              </div>
+                              <h2>${placeInformation[index].name}</h2>
+                              <p>${placeInformation[index].description}</p>
+                              <img src="${placeInformation[index].imageUrl}" alt="${placeInformation[index].name}" />              
+                              <button onclick="navigate(${coordinate.lat}, ${coordinate.lng})">Let's go</button>
                             `,
                 });
 
                 // Add a click event listener to each marker to open the InfoWindow
                 marker.addListener("click", () => {
-                    infoWindow.open(instance, marker); // Open the InfoWindow
+                    if (openInfoWindowRef.current) {
+                        openInfoWindowRef.current.close();
+                    }
 
-                    // Ensure the InfoWindow is correctly positioned
+                    // Open the new InfoWindow
+                    infoWindow.open(instance, marker);
                     infoWindow.setPosition(coordinate);
+
+                    // Update the openInfoWindowRef with the current InfoWindow
+                    openInfoWindowRef.current = infoWindow;
                 });
 
                 markerRefs[index] = marker; // Store the marker reference
@@ -126,6 +125,9 @@ function MyMapComponent() {
             const newCenter = new window.google.maps.LatLng(lat, lng);
             map.panTo(newCenter);
             map.setZoom(600); // Adjust the zoom level as needed (15 is an example)
+            if (openInfoWindowRef.current) {
+                openInfoWindowRef.current.close();
+            }
         }
     };
 
@@ -141,7 +143,7 @@ function createOverlay(map) {
         map,
     });
 
-    // let renderer, scene, camera;
+    // let renderer, scene, camera, loader;
     // let groupObject;
     const loader = new GLTFLoader();
     placeInformation.forEach((place) => {
@@ -150,24 +152,18 @@ function createOverlay(map) {
             const group = object.scene;
             group.scale.setScalar(place.modelScale);
             group.rotation.set(...Object.values(place.modelRotation));
-            const pos = overlay.latLngAltitudeToVector3(place.modelCoordinates);
-            group.position.copy(pos);
-            overlay.scene.add(group);
-            const directionalLight = new DirectionalLight(0xffffff, 0.1);
-            directionalLight.position.set(
-                pos.x + 1000,
-                pos.y + 1000,
-                pos.z + 1000
+            group.position.copy(
+                overlay.latLngAltitudeToVector3(place.modelCoordinates)
             );
-            overlay.scene.add(directionalLight);
+            overlay.scene.add(group);
         });
     });
 
     overlay.scene.add(new AmbientLight(0xffffff, 0.9));
     // add directional light
-    // const directionalLight = new DirectionalLight(0xffffff, 0.9);
-    // directionalLight.position.set(100, 100, 100);
-    // overlay.scene.add(directionalLight);
+    const directionalLight = new DirectionalLight(0xffffff, 0.9);
+    directionalLight.position.set(100, 100, 100);
+    overlay.scene.add(directionalLight);
 
     // overlay.onAdd = () => {
     //     scene = new Scene();
@@ -210,32 +206,32 @@ function createOverlay(map) {
     //     });
     //     renderer.autoClear = false;
 
-    //     loader.manager.onLoad = () => {
-    //         renderer.setAnimationLoop(() => {
-    //             map.moveCamera({
-    //                 tilt: mapOptions.tilt,
-    //                 heading: mapOptions.heading,
-    //                 zoom: mapOptions.zoom,
-    //             });
-    //             // if (groupObject) {
-    //             //     const currScale =
-    //             //         ((mapOptions.zoom - 6) / (20 - 6)) *
-    //             //             (25 - modelInitialScale) +
-    //             //         modelInitialScale;
-    //             //     // ((90000 - 25) / (6 - 20)) * mapOptions.zoom + 150000;
-    //             //     groupObject.scale.setScalar(currScale);
-    //             // }
-    //             if (mapOptions.tilt < 60) {
-    //                 mapOptions.tilt += 0.5;
-    //             } else if (mapOptions.zoom < 20) {
-    //                 mapOptions.zoom += 0.05;
-    //             } else if (mapOptions.heading < 125) {
-    //                 mapOptions.heading += 0.5;
-    //             } else {
-    //                 renderer.setAnimationLoop(null);
-    //             }
-    //         });
-    //     };
+    //     // loader.manager.onLoad = () => {
+    //     //     renderer.setAnimationLoop(() => {
+    //     //         map.moveCamera({
+    //     //             tilt: mapOptions.tilt,
+    //     //             heading: mapOptions.heading,
+    //     //             zoom: mapOptions.zoom,
+    //     //         });
+    //     //         // if (groupObject) {
+    //     //         //     const currScale =
+    //     //         //         ((mapOptions.zoom - 6) / (20 - 6)) *
+    //     //         //             (25 - modelInitialScale) +
+    //     //         //         modelInitialScale;
+    //     //         //     // ((90000 - 25) / (6 - 20)) * mapOptions.zoom + 150000;
+    //     //         //     groupObject.scale.setScalar(currScale);
+    //     //         // }
+    //     //         if (mapOptions.tilt < 60) {
+    //     //             mapOptions.tilt += 0.5;
+    //     //         } else if (mapOptions.zoom < 20) {
+    //     //             mapOptions.zoom += 0.05;
+    //     //         } else if (mapOptions.heading < 125) {
+    //     //             mapOptions.heading += 0.5;
+    //     //         } else {
+    //     //             renderer.setAnimationLoop(null);
+    //     //         }
+    //     //     });
+    //     // };
     // };
 
     // overlay.onDraw = ({ transformer }) => {
