@@ -152,7 +152,7 @@ function createOverlay(map) {
     overlay.scene.add(new AmbientLight(0xffffff, 0.9));
     // add directional light
     const directionalLight = new DirectionalLight(0xffffff, 0.9);
-    directionalLight.position.set(10, 10, 10);
+    directionalLight.position.set(100, 100, 100);
     overlay.scene.add(directionalLight);
 
     // overlay.onAdd = () => {

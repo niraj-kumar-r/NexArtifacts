@@ -496,6 +496,11 @@ nav .menu-btn,
     .name {
         width: 60%;
     }
+
+    .about-text p {
+        width: 100%;
+        font-size: 1rem;
+    }
 }
 .scroll {
     left: 50%;
