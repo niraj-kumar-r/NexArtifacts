@@ -22,6 +22,10 @@ const placeSchema = new Schema(
             type: {
                 lat: Number,
                 lng: Number,
+                altitude: {
+                    type: Number,
+                    default: 0,
+                },
             },
             required: true,
         },

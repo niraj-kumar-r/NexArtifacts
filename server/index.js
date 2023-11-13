@@ -74,8 +74,27 @@ app.get("/", async (req, res) => {
 
     // uncomment to insert placeInformation into database
     // const places = await Places.insertMany(placeInformation);
+    const placeInformation = places.map((place) => {
+        return {
+            model: place.model,
+            modelScale: place.modelScale,
+            modelRotation: {
+                x: place.modelRotation.x,
+                y: place.modelRotation.y,
+                z: place.modelRotation.z,
+            },
+            modelCoordinates: {
+                lat: place.modelCoordinates.lat,
+                lng: place.modelCoordinates.lng,
+                altitude: place.modelCoordinates.altitude,
+            },
+            name: place.name,
+            description: place.description,
+            imageUrl: place.imageUrl,
+        };
+    });
 
-    res.json({ places });
+    res.json({ placeInformation });
 });
 
 /* MONGOOSE SETUP */
