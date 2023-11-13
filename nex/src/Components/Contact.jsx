@@ -66,22 +66,20 @@ function Contact() {
           <div className="contact-info">
             <h3 className="title">Let's get in touch</h3>
             <p className="text">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe
-              dolorum adipisci recusandae praesentium dicta!
-            </p>
+  If you have any questions or concerns, please don't hesitate to reach out to us. Our dedicated team is here to assist you and provide the information you need. </p>
 
             <div className="info">
               <div className="information">
                 <img src={location1} className="icon" alt="" />
-                <p>92 Cherry Drive Uniondale, NY 11553</p>
+                <p>IIT - Tirupati </p>
               </div>
               <div className="information">
                 <img src={email1} className="icon" alt="style" />
-                <p>lorem@ipsum.com</p>
+                <p>software@engineering.com</p>
               </div>
               <div className="information">
                 <img src={phone1} className="icon" alt="style" />
-                <p>123-456-789</p>
+                <p>+91 000000000</p>
               </div>
             </div>
           </div>
@@ -149,7 +147,7 @@ function Contact() {
                 className="btn"
                 onClick={handleContactClick}
               />
-              {messageSent && <p className="message-sent">Message Sent!</p>}
+              {messageSent && <p className="message-sent ">Message Sent Successfully!</p>}
             </form>
           </div>
         </div>
