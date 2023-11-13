@@ -50,7 +50,7 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 //         model: "/eiffel_tower/scene.gltf",
 //         modelScale: 16,
 //         modelRotation: { x: Math.PI / 2, y: Math.PI / 4, z: 0 },
-//         modelCoordinates: { lat: 48.8576, lng: 2.2945, altitude: 40 },
+//         modelCoordinates: { lat: 48.8576, lng: 2.2945, altitude: 0 },
 //         name: "Eiffel Tower",
 //         description:
 //             "The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France. It is named after the engineer Gustave Eiffel, whose company designed and built the tower",
@@ -84,7 +84,7 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 //         name: "Colosseum",
 //         description:
 //             "Big Ben refers to the iconic clock tower at the north end of the Palace of Westminster in London. Completed in 1859, it is known for its impressive Gothic architecture and houses the Great Bell, commonly referred to as Big Ben, which chimes the hours",
-//         imageUrl: "/images/colesseum.jpg", // Replace with the URL of an image for the place
+//         imageUrl: "/images/colesseum.jpeg", // Replace with the URL of an image for the place
 //     },
 // ];
 /* ROUTES */
@@ -115,7 +115,7 @@ app.get("/", async (req, res) => {
         };
     });
 
-    res.json({ placeInformation });
+    res.json({ placeInformation: placeInfo });
 });
 
 /* MONGOOSE SETUP */

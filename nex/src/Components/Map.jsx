@@ -53,10 +53,12 @@ function MyMapComponent({ placeInformation }) {
                 // Create an InfoWindow for this marker
                 const infoWindow = new window.google.maps.InfoWindow({
                     content: `
+                            <div class="info-container">
                               <h2>${place.name}</h2>
                               <p>${place.description}</p>
                               <img src="${place.imageUrl}" alt="${place.name}" />              
                               <button onclick="navigate(${coordinate.lat}, ${coordinate.lng})">Let's go</button>
+                            </div>
                             `,
                 });
 

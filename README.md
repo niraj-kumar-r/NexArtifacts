@@ -46,7 +46,7 @@ To host our website locally, follow these steps:
 6. Replace the REACT_APP_GOOGLE_MAPS_ID variable with your own Google Maps ID.
    (Note: Make sure to use a vector map with tilt and rotation enabled.
    For more info visit : https://developers.google.com/maps/documentation/javascript/webgl)
-7. Run `npm start` to start the server.
+7. Run `npm start` to start the website.
 
 ## How to Use
 
