@@ -109,18 +109,26 @@ function createOverlay(map, placeInformation) {
             const group = object.scene;
             group.scale.setScalar(place.modelScale);
             group.rotation.set(...Object.values(place.modelRotation));
-            group.position.copy(
-                overlay.latLngAltitudeToVector3(place.modelCoordinates)
+            const modelCoordinates = overlay.latLngAltitudeToVector3(
+                place.modelCoordinates
             );
+            group.position.copy(modelCoordinates);
             overlay.scene.add(group);
+            const directionalLight = new DirectionalLight(0xffffff, 0.1);
+            directionalLight.position.set(
+                modelCoordinates.x + 1000,
+                modelCoordinates.y + 1000,
+                modelCoordinates.z + 1000
+            );
+            overlay.scene.add(directionalLight);
         });
     });
 
     overlay.scene.add(new AmbientLight(0xffffff, 0.9));
     // add directional light
-    const directionalLight = new DirectionalLight(0xffffff, 0.9);
-    directionalLight.position.set(100, 100, 100);
-    overlay.scene.add(directionalLight);
+    // const directionalLight = new DirectionalLight(0xffffff, 0.9);
+    // directionalLight.position.set(100, 100, 100);
+    // overlay.scene.add(directionalLight);
 
     // overlay.onAdd = () => {
     //     scene = new Scene();
