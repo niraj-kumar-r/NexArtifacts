@@ -90,14 +90,18 @@ function MyMapComponent() {
                 });
 
                 // Create an InfoWindow for this marker
-                const infoWindow = new window.google.maps.InfoWindow({
-                    content: `
-                              <h2>${placeInformation[index].name}</h2>
-                              <p>${placeInformation[index].description}</p>
-                              <img src="${placeInformation[index].imageUrl}" alt="${placeInformation[index].name}" />              
-                              <button onclick="navigate(${coordinate.lat}, ${coordinate.lng})">Let's go</button>
-                            `,
-                });
+// Inside the marker.addListener block in MyMapComponent
+const infoWindow = new window.google.maps.InfoWindow({
+    content: `
+      <div class="info-container">
+        <h2>${placeInformation[index].name}</h2>
+        <p>${placeInformation[index].description}</p>
+        <img src="${placeInformation[index].imageUrl}" alt="${placeInformation[index].name}" />
+        <button onclick="navigate(${coordinate.lat}, ${coordinate.lng})">Let's go</button>
+      </div>
+    `,
+  });
+  
 
                 // Add a click event listener to each marker to open the InfoWindow
                 marker.addListener("click", () => {
