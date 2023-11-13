@@ -272,7 +272,7 @@ textarea.input {
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: linear-gradient(to bottom, #61abe8, rgb(42, 110, 237));
+  background: linear-gradient(to bottom, #1cd4af, #159b80);
   bottom: 50%;
   right: 50%;
   transform: translate(-40%, 38%);
@@ -382,4 +382,55 @@ textarea.input {
   .btn {
     padding: 0.45rem 1.2rem;
   }
+}
+
+
+
+/* Add this class to your body element to activate dark mode */
+body.dark-mode .container,
+body.dark-mode .form,
+body.dark-mode .contact-form,
+body.dark-mode .circle,
+body.dark-mode .contact-form:before,
+body.dark-mode form,
+body.dark-mode .title,
+body.dark-mode .input,
+body.dark-mode textarea.input,
+body.dark-mode .input-container label,
+body.dark-mode .btn,
+body.dark-mode .input-container span,
+body.dark-mode .contact-info,
+body.dark-mode .contact-info .title,
+body.dark-mode .text,
+body.dark-mode .information,
+body.dark-mode .icon,
+body.dark-mode .social-media,
+body.dark-mode .social-media p,
+body.dark-mode .social-icons a,
+body.dark-mode .big-circle,
+body.dark-mode .big-circle:after,
+body.dark-mode .square {
+  background-color: #0b0b0b;
+  color: #fff;
+  border-color: #fff;
+}
+
+body.dark-mode .input-container span:before,
+body.dark-mode .input-container span:after {
+  background-color: #0b0b0b;
+}
+
+body.dark-mode .btn {
+  background-color: #0b0b0b;
+  border-color: #fff;
+  color: #fff;
+}
+
+body.dark-mode .social-icons a {
+  background: linear-gradient(45deg, #333, #0b0b0b);
+  color: #fff;
+}
+
+body.dark-mode .social-icons a:hover {
+  transform: scale(1.05);
 }
