@@ -1,78 +1,82 @@
+// Navbar.jsx
+
 import React, { useState } from "react";
-import logo from "../images/logo.png";
+import logo from "../images/logo2.png";
+import ModeChange from "./Mode"; // Adjust the import path based on your project structure
 
 function Navbar() {
-    const [nav, setNav] = useState(false);
+  const [nav, setNav] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-    const changeBackground = () => {
-        if (window.scrollY >= 50) {
-            setNav(true);
-        } else {
-            setNav(false);
-        }
-    }; //the changeBackground function is used to change the background color of the navbar when the user scrolls down the page that is when the scrollY is greater than or equal to 50px then the background color of the navbar changes to white
+  const changeBackground = () => {
+    if (window.scrollY >= 50) {
+      setNav(true);
+    } else {
+      setNav(false);
+    }
+  };
 
-    window.addEventListener("scroll", changeBackground); //this is a listener that listens to the scroll event and calls the changeBackground function
+  const handleModeChange = (mode) => {
+    setIsDarkMode(mode);
+  };
 
-    const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-        });
-    };
+  window.addEventListener("scroll", changeBackground);
 
-    const scrollToSection = (sectionId) => {
-        const section = document.getElementById(sectionId);
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
-        if (section) {
-            section.scrollIntoView({ behavior: "smooth" });
-        }
-    };
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
 
-    return (
-        <nav className={nav ? "nav active" : "nav"}>
-            <a href="#" className="logo">
-                <img src={logo} alt="" />
-            </a>
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
-            <input type="checkbox" className="menu-btn" id="menu-btn" />
-            <label className="menu-icon" for="menu-btn">
-                <span className="nav-icon"></span>
-            </label>
+  return (
+    <nav className={nav ? "nav active" : "nav"}>
+      <a href="#" className="logo">
+        <img src={logo} alt="" />
+      </a>
 
-            <ul className="menu">
-                <li>
-                    <a href="#HOME" onClick={scrollToTop}>
-                        Home
-                    </a>
-                </li>
-                <li>
-                    {" "}
-                    <a
-                        href="#FEATURE"
-                        onClick={() => scrollToSection("features")}
-                    >
-                        Features
-                    </a>
-                </li>
+      <input type="checkbox" className="menu-btn" id="menu-btn" />
+      <label className="menu-icon" htmlFor="menu-btn">
+        <span className="nav-icon"></span>
+      </label>
 
-                <li>
-                    <a href="#ABOUT" onClick={() => scrollToSection("about")}>
-                        About
-                    </a>
-                </li>
+      <ul className="menu">
+        <li>
+          <a href="#HOME" onClick={scrollToTop}>
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="#FEATURE" onClick={() => scrollToSection("features")}>
+            Features
+          </a>
+        </li>
 
-                <li>
-                    <a
-                        href="#CONTACT"
-                        onClick={() => scrollToSection("contact")}
-                    >
-                        Contact
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    );
+        <li>
+          <a href="#ABOUT" onClick={() => scrollToSection("about")}>
+            About
+          </a>
+        </li>
+
+        <li>
+          <a href="#CONTACT" onClick={() => scrollToSection("contact")}>
+            Contact
+          </a>
+        </li>
+      </ul>
+
+      {/* Include the ModeChange component */}
+      <ModeChange onModeChange={handleModeChange} />
+    </nav>
+  );
 }
 
 export default Navbar;

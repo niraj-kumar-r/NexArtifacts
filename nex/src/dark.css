@@ -1,0 +1,80 @@
+.dark-mode {
+    background-color: #1a1a1a; /* Set dark mode background color */
+    color: #fff; /* Set dark mode text color */
+}
+
+.dark-mode a {
+    color: #bb86fc; /* Set dark mode link color */
+}
+
+.dark-mode button {
+    background-color: #292929; /* Set dark mode button background color */
+    color: #fff; /* Set dark mode button text color */
+}
+
+
+
+body.dark-mode nav {
+    background-color: #333; /* Set dark mode background color for the navigation bar */
+    color: #fff; /* Set dark mode text color for the navigation items */
+}
+
+body.dark-mode nav.active {
+    background-color: #222; /* Set dark mode background color for the active navigation item */
+    box-shadow: 5px 10px 30px rgba(189, 198, 64, 0.411);
+}
+
+body.dark-mode nav ul li a {
+    color: #fff; /* Set dark mode text color for navigation links */
+}
+
+body.dark-mode nav ul li a:hover {
+    background-color: #555; /* Set dark mode background color for hover state */
+    box-shadow: 5px 10px 30px rgba(2, 238, 255, 0.336);
+}
+
+/* Add more styles for dark mode as needed */
+body.dark-mode #my-pic {
+    filter: invert(1); /* Invert the colors for the image */
+}
+
+body.dark-mode .name {
+    color: #fff; /* Set dark mode text color for the name */
+}
+
+body.dark-mode .name span {
+    color: #00b7ff;
+}
+
+body.dark-mode .name .details {
+    color: #969696;
+}
+
+body.dark-mode .name h1 {
+    color: #fff; /* Set dark mode text color for the heading */
+}
+
+body.dark-mode .cv-btn {
+    background-color: #00b7ff;
+    box-shadow: 5px 10px 30px rgba(2, 238, 255, 0.336);
+    color: #fff;
+}
+
+body.dark-mode .cv-btn:hover {
+    background-color: #1900ff;
+    transition: all ease 0.5s;
+    color: #fff;
+}
+
+body.dark-mode .f-heading h1 {
+    color: #fff; /* Set dark mode text color for the heading */
+}
+
+body.dark-mode .f-heading p {
+    color: rgba(247, 247, 247, 0.678);
+}
+
+body.dark-mode .f-heading {
+    margin-top: 60px;
+    margin-bottom: -80px;
+}

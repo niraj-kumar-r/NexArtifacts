@@ -25,7 +25,7 @@ function Feature() {
                     title={
                         <span
                             style={{
-                                fontSize: "1rem",
+                                fontSize: "1.3rem",
                                 fontWeight: "bold",
                                 color: "#6B90F5",
                             }}
@@ -41,7 +41,7 @@ function Feature() {
                     title={
                         <span
                             style={{
-                                fontSize: "1rem",
+                                fontSize: "1.3rem",
                                 fontWeight: "bold",
                                 color: "#6B90F5",
                             }}
@@ -57,7 +57,7 @@ function Feature() {
                     title={
                         <span
                             style={{
-                                fontSize: "1rem",
+                                fontSize: "1.3rem",
                                 fontWeight: "bold",
                                 color: "#6B90F5",
                             }}
@@ -72,7 +72,7 @@ function Feature() {
                     title={
                         <span
                             style={{
-                                fontSize: "1rem",
+                                fontSize: "1.3rem",
                                 fontWeight: "bold",
                                 color: "#6B90F5",
                             }}
