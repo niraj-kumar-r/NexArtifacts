@@ -35,6 +35,7 @@ const placeInformation = [
     {
         model: "/taj_mahal_3d_model/scene.gltf",
         modelScale: 0.2,
+        modelRotation: { x: Math.PI / 2, y: 0, z: 0 },
         modelCoordinates: { lat: 27.1745, lng: 78.0421 },
         name: "Taj Mahal",
         description:
@@ -44,6 +45,7 @@ const placeInformation = [
     {
         model: "/low_poly/scene.gltf",
         modelScale: 25,
+        modelRotation: { x: Math.PI / 2, y: 0, z: 0 },
         modelCoordinates: { lat: 17.3616, lng: 78.4747 },
         name: "Charminar",
         description:
@@ -53,6 +55,7 @@ const placeInformation = [
     {
         model: "krishna_muec/scene.gltf",
         modelScale: 150,
+        modelRotation: { x: Math.PI / 2, y: 0, z: 0 },
         modelCoordinates: { lat: 48.8584, lng: 2.2945, altitude: 40 },
         name: "Eiffel Tower",
         description:
@@ -138,7 +141,7 @@ function createOverlay(map) {
             console.log("loaded", object);
             const group = object.scene;
             group.scale.setScalar(place.modelScale);
-            group.rotation.set(Math.PI / 2, 0, 0);
+            group.rotation.set(...Object.values(place.modelRotation));
             group.position.copy(
                 overlay.latLngAltitudeToVector3(place.modelCoordinates)
             );
