@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Wrapper, Marker } from "@googlemaps/react-wrapper"; // Import Marker component
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import * as THREE from "three";
 import {
     PerspectiveCamera,
     Scene,
@@ -9,14 +10,15 @@ import {
     WebGLRenderer,
     Matrix4,
 } from "three";
+import { ThreeJSOverlayView, latLngToVector3Relative } from "@googlemaps/three";
 import "./Map.css";
 
-const initialCenter = { lat: 27.175, lng: 78.0421 }; // Set a neutral initial center
+const initialCenter = { lat: 27.17445, lng: 78.0421 }; // Set a neutral initial center
 const modelInitialScale = 25;
 
 const mapOptions = {
     mapId: process.env.REACT_APP_GOOGLE_MAPS_ID,
-    zoom: 1,
+    zoom: 20,
     center: initialCenter, // Set the initial center to be neutral
     heading: 0,
     tilt: 60,
@@ -32,18 +34,26 @@ const markerCoordinates = [
 const placeInformation = [
     {
         model: "/taj_mahal_3d_model/scene.gltf",
+        modelScale: 0.2,
+        modelCoordinates: { lat: 27.1745, lng: 78.0421 },
         name: "Taj Mahal",
         description:
             "The Taj Mahal is an ivory-white marble mausoleum on the right bank of the Yamuna river in the Indian city of Agra.",
         imageUrl: "/images/tajMahal.jpg", // Replace with the URL of an image for the place
     },
     {
+        model: "/low_poly/scene.gltf",
+        modelScale: 25,
+        modelCoordinates: { lat: 17.3616, lng: 78.4747 },
         name: "Charminar",
         description:
             "The Charminar is a monument and mosque located in Hyderabad, Telangana, India. The landmark has become a global icon of Hyderabad, listed among the most recognized structures of India.",
         imageUrl: "URL_TO_OTHER_IMAGE", // Replace with the URL of an image for the place
     },
     {
+        model: "krishna_muec/scene.gltf",
+        modelScale: 150,
+        modelCoordinates: { lat: 48.8584, lng: 2.2945, altitude: 40 },
         name: "Eiffel Tower",
         description:
             "The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France. It is named after the engineer Gustave Eiffel, whose company designed and built the tower",
@@ -67,6 +77,7 @@ function MyMapComponent() {
             setMap(instance); // Update map when created
             console.log("map created");
             overlayRef.current = createOverlay(instance);
+            console.log("overlay created");
 
             // Create markers for each coordinate
             markerCoordinates.forEach((coordinate, index) => {
@@ -112,95 +123,122 @@ function MyMapComponent() {
 
 function createOverlay(map) {
     // eslint-disable-next-line no-undef
-    const overlay = new google.maps.WebGLOverlayView();
-    let renderer, scene, camera, loader;
-    let groupObject;
+    // const overlay = new google.maps.WebGLOverlayView();
+    const overlay = new ThreeJSOverlayView({
+        // upAxis: "Y",
+        anchor: mapOptions.center,
+        map,
+    });
 
-    overlay.onAdd = () => {
-        scene = new Scene();
-        camera = new PerspectiveCamera();
-        const light = new AmbientLight(0xffffff, 0.9);
-        // add directional light
-        const directionalLight = new DirectionalLight(0xffffff, 0.9);
-        directionalLight.position.set(10, 10, 10);
-        scene.add(directionalLight);
-        scene.add(light);
-
-        loader = new GLTFLoader();
-        loader.loadAsync("/low_poly/scene.gltf").then((object) => {
+    // let renderer, scene, camera, loader;
+    // let groupObject;
+    const loader = new GLTFLoader();
+    placeInformation.forEach((place) => {
+        loader.loadAsync(place.model).then((object) => {
             console.log("loaded", object);
             const group = object.scene;
-            groupObject = group;
-            group.scale.setScalar(modelInitialScale);
+            group.scale.setScalar(place.modelScale);
             group.rotation.set(Math.PI / 2, 0, 0);
-            group.position.setZ(-120);
-            scene.add(group);
+            group.position.copy(
+                overlay.latLngAltitudeToVector3(place.modelCoordinates)
+            );
+            overlay.scene.add(group);
         });
+    });
 
-        loader.loadAsync("/taj_mahal_3d_model/scene.gltf").then((object) => {
-            console.log("loaded", object);
-            const group = object.scene;
-            groupObject = group;
-            group.scale.setScalar(0.19);
-            group.rotation.set(Math.PI / 2, 0, 0);
-            group.position.setZ(-120);
-            scene.add(group);
-        });
-    };
+    overlay.scene.add(new AmbientLight(0xffffff, 0.9));
+    // add directional light
+    const directionalLight = new DirectionalLight(0xffffff, 0.9);
+    directionalLight.position.set(10, 10, 10);
+    overlay.scene.add(directionalLight);
 
-    overlay.onContextRestored = ({ gl }) => {
-        renderer = new WebGLRenderer({
-            canvas: gl.canvas,
-            context: gl,
-            ...gl.getContextAttributes(),
-        });
-        renderer.autoClear = false;
+    // overlay.onAdd = () => {
+    //     scene = new Scene();
+    //     camera = new PerspectiveCamera();
+    //     const light = new AmbientLight(0xffffff, 0.9);
+    //     // add directional light
+    //     const directionalLight = new DirectionalLight(0xffffff, 0.9);
+    //     directionalLight.position.set(10, 10, 10);
+    //     scene.add(directionalLight);
+    //     scene.add(light);
+    //     console.log("in onAdd");
 
-        // loader.manager.onLoad = () => {
-        //     renderer.setAnimationLoop(() => {
-        //         map.moveCamera({
-        //             tilt: mapOptions.tilt,
-        //             heading: mapOptions.heading,
-        //             zoom: mapOptions.zoom,
-        //         });
-        //         // if (groupObject) {
-        //         //     const currScale =
-        //         //         ((mapOptions.zoom - 6) / (20 - 6)) *
-        //         //             (25 - modelInitialScale) +
-        //         //         modelInitialScale;
-        //         //     // ((90000 - 25) / (6 - 20)) * mapOptions.zoom + 150000;
-        //         //     groupObject.scale.setScalar(currScale);
-        //         // }
-        //         if (mapOptions.tilt < 60) {
-        //             mapOptions.tilt += 0.5;
-        //         } else if (mapOptions.zoom < 20) {
-        //             mapOptions.zoom += 0.05;
-        //         } else if (mapOptions.heading < 125) {
-        //             mapOptions.heading += 0.5;
-        //         } else {
-        //             renderer.setAnimationLoop(null);
-        //         }
-        //     });
-        // };
-    };
+    //     loader = new GLTFLoader();
+    //     loader.loadAsync("/low_poly/scene.gltf").then((object) => {
+    //         console.log("loaded", object);
+    //         const group = object.scene;
+    //         groupObject = group;
+    //         group.scale.setScalar(modelInitialScale);
+    //         group.rotation.set(Math.PI / 2, 0, 0);
+    //         group.position.setY(-120);
+    //         scene.add(group);
+    //     });
 
-    overlay.onDraw = ({ transformer }) => {
-        const matrix = transformer.fromLatLngAltitude({
-            lat: mapOptions.center.lat,
-            lng: mapOptions.center.lng,
-            altitude: 120,
-        });
-        camera.projectionMatrix = new Matrix4().fromArray(matrix);
+    //     // loader.loadAsync("/taj_mahal_3d_model/scene.gltf").then((object) => {
+    //     //     console.log("loaded", object);
+    //     //     const group = object.scene;
+    //     //     groupObject = group;
+    //     //     group.scale.setScalar(0.19);
+    //     //     group.rotation.set(Math.PI / 2, 0, 0);
+    //     //     group.position.setZ(-120);
+    //     //     scene.add(group);
+    //     // });
+    // };
 
-        overlay.requestRedraw();
-        renderer.render(scene, camera);
-        renderer.resetState();
-    };
+    // overlay.onContextRestored = ({ gl }) => {
+    //     renderer = new WebGLRenderer({
+    //         canvas: gl.canvas,
+    //         context: gl,
+    //         ...gl.getContextAttributes(),
+    //     });
+    //     renderer.autoClear = false;
+
+    //     // loader.manager.onLoad = () => {
+    //     //     renderer.setAnimationLoop(() => {
+    //     //         map.moveCamera({
+    //     //             tilt: mapOptions.tilt,
+    //     //             heading: mapOptions.heading,
+    //     //             zoom: mapOptions.zoom,
+    //     //         });
+    //     //         // if (groupObject) {
+    //     //         //     const currScale =
+    //     //         //         ((mapOptions.zoom - 6) / (20 - 6)) *
+    //     //         //             (25 - modelInitialScale) +
+    //     //         //         modelInitialScale;
+    //     //         //     // ((90000 - 25) / (6 - 20)) * mapOptions.zoom + 150000;
+    //     //         //     groupObject.scale.setScalar(currScale);
+    //     //         // }
+    //     //         if (mapOptions.tilt < 60) {
+    //     //             mapOptions.tilt += 0.5;
+    //     //         } else if (mapOptions.zoom < 20) {
+    //     //             mapOptions.zoom += 0.05;
+    //     //         } else if (mapOptions.heading < 125) {
+    //     //             mapOptions.heading += 0.5;
+    //     //         } else {
+    //     //             renderer.setAnimationLoop(null);
+    //     //         }
+    //     //     });
+    //     // };
+    // };
+
+    // overlay.onDraw = ({ transformer }) => {
+    //     const matrix = transformer.fromLatLngAltitude({
+    //         lat: mapOptions.center.lat,
+    //         lng: mapOptions.center.lng,
+    //         altitude: 120,
+    //     });
+    //     camera.projectionMatrix = new Matrix4().fromArray(matrix);
+    //     console.log("in onDraw");
+
+    //     overlay.requestRedraw();
+    //     renderer.render(scene, camera);
+    //     renderer.resetState();
+    // };
 
     // eslint-disable-next-line no-undef
     // const infoWindow = new google.maps.InfoWindow();
 
-    overlay.setMap(map);
+    // overlay.setMap(map);
 
     return overlay;
 }

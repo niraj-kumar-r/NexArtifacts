@@ -7,6 +7,7 @@
         "@emotion/react": "^11.11.1",
         "@emotion/styled": "^11.11.0",
         "@googlemaps/react-wrapper": "^1.1.35",
+        "@googlemaps/three": "^4.0.6",
         "@react-google-maps/api": "^2.19.2",
         "@react-three/drei": "^9.87.0",
         "@react-three/fiber": "^8.14.5",
