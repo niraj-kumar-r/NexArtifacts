@@ -1,20 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Wrapper, Marker } from "@googlemaps/react-wrapper"; // Import Marker component
+import { Wrapper } from "@googlemaps/react-wrapper"; // Import Marker component
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import * as THREE from "three";
 import {
-    PerspectiveCamera,
-    Scene,
+    // PerspectiveCamera,
+    // Scene,
     AmbientLight,
     DirectionalLight,
-    WebGLRenderer,
-    Matrix4,
+    // WebGLRenderer,
+    // Matrix4,
 } from "three";
-import { ThreeJSOverlayView, latLngToVector3Relative } from "@googlemaps/three";
+import { ThreeJSOverlayView } from "@googlemaps/three";
 import "./Map.css";
 
 const initialCenter = { lat: 27.17445, lng: 78.0421 }; // Set a neutral initial center
-const modelInitialScale = 25;
+// const modelInitialScale = 25;
 
 const mapOptions = {
     mapId: process.env.REACT_APP_GOOGLE_MAPS_ID,
@@ -23,13 +22,6 @@ const mapOptions = {
     heading: 0,
     tilt: 60,
 };
-
-const markerCoordinates = [
-    { lat: 27.17445, lng: 78.0421 }, // Coordinate 1
-    { lat: 17.3616, lng: 78.4747 }, // Coordinate 2
-    { lat: 48.8584, lng: 2.2945 }, // Coordinate 3
-    // Add more coordinates as needed
-];
 
 const placeInformation = [
     {
@@ -83,7 +75,8 @@ function MyMapComponent() {
             console.log("overlay created");
 
             // Create markers for each coordinate
-            markerCoordinates.forEach((coordinate, index) => {
+            placeInformation.forEach((place, index) => {
+                const coordinate = place.modelCoordinates;
                 const marker = new window.google.maps.Marker({
                     position: coordinate,
                     map: instance,
