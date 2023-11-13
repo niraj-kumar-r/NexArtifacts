@@ -115,7 +115,7 @@ app.get("/", async (req, res) => {
         };
     });
 
-    res.json({ placeInformation: placeInfo });
+    res.json({ placeInformation });
 });
 
 /* MONGOOSE SETUP */
