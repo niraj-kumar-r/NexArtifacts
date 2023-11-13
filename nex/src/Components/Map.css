@@ -41,3 +41,57 @@ select {
     width: 200px;
     height: 200px;
 }
+
+
+/* Map.css */
+
+/* Style the information box container */
+.info-container {
+    max-width: 300px; /* Adjust the maximum width as needed */
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Style the title */
+  .info-container h2 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  /* Style the description text */
+  .info-container p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  
+  /* Style the image */
+  .info-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  /* Style the button */
+  .info-container button {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Style the button hover effect */
+  .info-container button:hover {
+    background-color: #0056b3;
+  }
+  
