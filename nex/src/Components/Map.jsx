@@ -6,7 +6,7 @@ import {
     // Scene,
     AmbientLight,
     DirectionalLight,
-    // WebGLRenderer,
+    // WebGLRenderer,dd
     // Matrix4,
 } from "three";
 import { ThreeJSOverlayView } from "@googlemaps/three";
@@ -21,14 +21,15 @@ const mapOptions = {
     center: initialCenter, // Set the initial center to be neutral
     heading: 0,
     tilt: 60,
+    labels: false,
 };
 
 const placeInformation = [
     {
         model: "/taj_mahal_3d_model/scene.gltf",
-        modelScale: 0.2,
-        modelRotation: { x: Math.PI / 2, y: 0, z: 0 },
-        modelCoordinates: { lat: 27.1745, lng: 78.0421 },
+        modelScale: 0.19,
+        modelRotation: { x: Math.PI / 2, y: -0.01, z: 0 },
+        modelCoordinates: { lat: 27.175, lng: 78.042128 },
         name: "Taj Mahal",
         description:
             "The Taj Mahal is an ivory-white marble mausoleum on the right bank of the Yamuna river in the Indian city of Agra.",
@@ -80,6 +81,7 @@ function MyMapComponent() {
                 const marker = new window.google.maps.Marker({
                     position: coordinate,
                     map: instance,
+                    // icon: place.imageUrl,
                 });
 
                 // Create an InfoWindow for this marker
@@ -126,7 +128,7 @@ function createOverlay(map) {
         map,
     });
 
-    // let renderer, scene, camera, loader;
+    // let renderer, scene, camera;
     // let groupObject;
     const loader = new GLTFLoader();
     placeInformation.forEach((place) => {
@@ -189,32 +191,32 @@ function createOverlay(map) {
     //     });
     //     renderer.autoClear = false;
 
-    //     // loader.manager.onLoad = () => {
-    //     //     renderer.setAnimationLoop(() => {
-    //     //         map.moveCamera({
-    //     //             tilt: mapOptions.tilt,
-    //     //             heading: mapOptions.heading,
-    //     //             zoom: mapOptions.zoom,
-    //     //         });
-    //     //         // if (groupObject) {
-    //     //         //     const currScale =
-    //     //         //         ((mapOptions.zoom - 6) / (20 - 6)) *
-    //     //         //             (25 - modelInitialScale) +
-    //     //         //         modelInitialScale;
-    //     //         //     // ((90000 - 25) / (6 - 20)) * mapOptions.zoom + 150000;
-    //     //         //     groupObject.scale.setScalar(currScale);
-    //     //         // }
-    //     //         if (mapOptions.tilt < 60) {
-    //     //             mapOptions.tilt += 0.5;
-    //     //         } else if (mapOptions.zoom < 20) {
-    //     //             mapOptions.zoom += 0.05;
-    //     //         } else if (mapOptions.heading < 125) {
-    //     //             mapOptions.heading += 0.5;
-    //     //         } else {
-    //     //             renderer.setAnimationLoop(null);
-    //     //         }
-    //     //     });
-    //     // };
+    //     loader.manager.onLoad = () => {
+    //         renderer.setAnimationLoop(() => {
+    //             map.moveCamera({
+    //                 tilt: mapOptions.tilt,
+    //                 heading: mapOptions.heading,
+    //                 zoom: mapOptions.zoom,
+    //             });
+    //             // if (groupObject) {
+    //             //     const currScale =
+    //             //         ((mapOptions.zoom - 6) / (20 - 6)) *
+    //             //             (25 - modelInitialScale) +
+    //             //         modelInitialScale;
+    //             //     // ((90000 - 25) / (6 - 20)) * mapOptions.zoom + 150000;
+    //             //     groupObject.scale.setScalar(currScale);
+    //             // }
+    //             if (mapOptions.tilt < 60) {
+    //                 mapOptions.tilt += 0.5;
+    //             } else if (mapOptions.zoom < 20) {
+    //                 mapOptions.zoom += 0.05;
+    //             } else if (mapOptions.heading < 125) {
+    //                 mapOptions.heading += 0.5;
+    //             } else {
+    //                 renderer.setAnimationLoop(null);
+    //             }
+    //         });
+    //     };
     // };
 
     // overlay.onDraw = ({ transformer }) => {
