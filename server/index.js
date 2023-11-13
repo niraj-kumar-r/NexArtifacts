@@ -7,6 +7,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
+import { Places } from "./models.js";
 
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
@@ -26,8 +27,9 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 /* ROUTES */
 
-app.get("/", (req, res) => {
-    res.json({ message: "Hello World" });
+app.get("/", async (req, res) => {
+    const places = await Places.find();
+    res.json({ places });
 });
 
 /* MONGOOSE SETUP */
