@@ -2,115 +2,113 @@ import React, { useEffect, useRef, useState } from "react";
 import { Wrapper, Marker } from "@googlemaps/react-wrapper"; // Import Marker component
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import {
-  PerspectiveCamera,
-  Scene,
-  AmbientLight,
-  DirectionalLight,
-  WebGLRenderer,
-  Matrix4,
+    PerspectiveCamera,
+    Scene,
+    AmbientLight,
+    DirectionalLight,
+    WebGLRenderer,
+    Matrix4,
 } from "three";
 import "./Map.css";
 
-const initialCenter = { lat: 48.8584, lng: 2.2945 }; // Set a neutral initial center
-const modelInitialScale = 10000;
+const initialCenter = { lat: 27.175, lng: 78.0421 }; // Set a neutral initial center
+const modelInitialScale = 25;
 
 const mapOptions = {
-  mapId: process.env.REACT_APP_GOOGLE_MAPS_ID,
-  zoom: 1,
-  center: initialCenter, // Set the initial center to be neutral
-  heading: 0,
-  tilt: 60,
+    mapId: process.env.REACT_APP_GOOGLE_MAPS_ID,
+    zoom: 1,
+    center: initialCenter, // Set the initial center to be neutral
+    heading: 0,
+    tilt: 60,
 };
-
 
 const markerCoordinates = [
     { lat: 27.17445, lng: 78.0421 }, // Coordinate 1
-    { lat:17.3616 , lng:  78.4747  }, // Coordinate 2
-    {lat: 48.8584, lng: 2.2945 }, // Coordinate 3
+    { lat: 17.3616, lng: 78.4747 }, // Coordinate 2
+    { lat: 48.8584, lng: 2.2945 }, // Coordinate 3
     // Add more coordinates as needed
-  ];
+];
 
-  const placeInformation = [
+const placeInformation = [
     {
-      name: "Taj Mahal",
-      description: "The Taj Mahal is an ivory-white marble mausoleum on the right bank of the Yamuna river in the Indian city of Agra.",
-      imageUrl: "URL_TO_TAJ_MAHAL_IMAGE", // Replace with the URL of an image for the place
+        model: "/taj_mahal_3d_model/scene.gltf",
+        name: "Taj Mahal",
+        description:
+            "The Taj Mahal is an ivory-white marble mausoleum on the right bank of the Yamuna river in the Indian city of Agra.",
+        imageUrl: "/images/tajMahal.jpg", // Replace with the URL of an image for the place
     },
     {
-      name: "Charminar",
-      description: "The Charminar is a monument and mosque located in Hyderabad, Telangana, India. The landmark has become a global icon of Hyderabad, listed among the most recognized structures of India.",
-      imageUrl: "URL_TO_OTHER_IMAGE", // Replace with the URL of an image for the place
+        name: "Charminar",
+        description:
+            "The Charminar is a monument and mosque located in Hyderabad, Telangana, India. The landmark has become a global icon of Hyderabad, listed among the most recognized structures of India.",
+        imageUrl: "URL_TO_OTHER_IMAGE", // Replace with the URL of an image for the place
     },
     {
-      name: "Eiffel Tower",
-      description: "The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France. It is named after the engineer Gustave Eiffel, whose company designed and built the tower",
-      imageUrl: "URL_TO_ANOTHER_IMAGE", // Replace with the URL of an image for the place
-    }
-  ];
-  
-  
-  function MyMapComponent() {
+        name: "Eiffel Tower",
+        description:
+            "The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France. It is named after the engineer Gustave Eiffel, whose company designed and built the tower",
+        imageUrl: "URL_TO_ANOTHER_IMAGE", // Replace with the URL of an image for the place
+    },
+];
+
+function MyMapComponent() {
     const [map, setMap] = useState(null); // Initialize map as null
     const ref = useRef();
     const overlayRef = useRef();
     const markerRefs = []; // Refs for the markers
-  
+
     useEffect(() => {
-      if (!overlayRef.current) {
-        console.log("creating overlay");
-        const instance = new window.google.maps.Map(ref.current, mapOptions);
-        setMap(instance); // Update map when created
-        console.log("map created");
-        overlayRef.current = createOverlay(instance);
-  
-        // Create markers for each coordinate
-        markerCoordinates.forEach((coordinate, index) => {
-          const marker = new window.google.maps.Marker({
-            position: coordinate,
-            map: instance,
-          });
-  
-          
-          // Create an InfoWindow for this marker
-          const infoWindow = new window.google.maps.InfoWindow({
-            content: `
-              
-              <h2>${placeInformation[index].name}</h2>
-              <p>${placeInformation[index].description}</p>
-              <img src="${placeInformation[index].imageUrl}" alt="${placeInformation[index].name}" />              
-              <button onclick="navigate(${coordinate.lat}, ${coordinate.lng})">Let's go</button>
-            `,
-          });
-  
-  // Add a click event listener to each marker to open the InfoWindow
-  marker.addListener("click", () => {
-    infoWindow.open(instance, marker); // Open the InfoWindow
+        if (!overlayRef.current) {
+            console.log("creating overlay");
+            const instance = new window.google.maps.Map(
+                ref.current,
+                mapOptions
+            );
+            setMap(instance); // Update map when created
+            console.log("map created");
+            overlayRef.current = createOverlay(instance);
 
-    // Ensure the InfoWindow is correctly positioned
-    infoWindow.setPosition(coordinate);
-  });
+            // Create markers for each coordinate
+            markerCoordinates.forEach((coordinate, index) => {
+                const marker = new window.google.maps.Marker({
+                    position: coordinate,
+                    map: instance,
+                });
 
-  markerRefs[index] = marker; // Store the marker reference
-});
-      }
+                // Create an InfoWindow for this marker
+                const infoWindow = new window.google.maps.InfoWindow({
+                    content: `
+                              <h2>${placeInformation[index].name}</h2>
+                              <p>${placeInformation[index].description}</p>
+                              <img src="${placeInformation[index].imageUrl}" alt="${placeInformation[index].name}" />              
+                              <button onclick="navigate(${coordinate.lat}, ${coordinate.lng})">Let's go</button>
+                            `,
+                });
+
+                // Add a click event listener to each marker to open the InfoWindow
+                marker.addListener("click", () => {
+                    infoWindow.open(instance, marker); // Open the InfoWindow
+
+                    // Ensure the InfoWindow is correctly positioned
+                    infoWindow.setPosition(coordinate);
+                });
+
+                markerRefs[index] = marker; // Store the marker reference
+            });
+        }
     }, []);
-  
+
     // Define the navigate function in the global scope
     window.navigate = (lat, lng) => {
         if (map) {
-          const newCenter = new window.google.maps.LatLng(lat, lng);
-          map.panTo(newCenter);
-          map.setZoom(600); // Adjust the zoom level as needed (15 is an example)
+            const newCenter = new window.google.maps.LatLng(lat, lng);
+            map.panTo(newCenter);
+            map.setZoom(600); // Adjust the zoom level as needed (15 is an example)
         }
-      };
-  
-    return <div ref={ref} id="map" />;
-  }
-  
-  
-  
-  
+    };
 
+    return <div ref={ref} id="map" />;
+}
 
 function createOverlay(map) {
     // eslint-disable-next-line no-undef
@@ -138,6 +136,16 @@ function createOverlay(map) {
             group.position.setZ(-120);
             scene.add(group);
         });
+
+        loader.loadAsync("/taj_mahal_3d_model/scene.gltf").then((object) => {
+            console.log("loaded", object);
+            const group = object.scene;
+            groupObject = group;
+            group.scale.setScalar(0.19);
+            group.rotation.set(Math.PI / 2, 0, 0);
+            group.position.setZ(-120);
+            scene.add(group);
+        });
     };
 
     overlay.onContextRestored = ({ gl }) => {
@@ -148,32 +156,32 @@ function createOverlay(map) {
         });
         renderer.autoClear = false;
 
-        loader.manager.onLoad = () => {
-            renderer.setAnimationLoop(() => {
-                map.moveCamera({
-                    tilt: mapOptions.tilt,
-                    heading: mapOptions.heading,
-                    zoom: mapOptions.zoom,
-                });
-                if (groupObject) {
-                    const currScale =
-                        ((mapOptions.zoom - 6) / (20 - 6)) *
-                            (25 - modelInitialScale) +
-                        modelInitialScale;
-                    // ((90000 - 25) / (6 - 20)) * mapOptions.zoom + 150000;
-                    groupObject.scale.setScalar(currScale);
-                }
-                if (mapOptions.tilt < 60) {
-                    mapOptions.tilt += 0.5;
-                } else if (mapOptions.zoom < 20) {
-                    mapOptions.zoom += 0.05;
-                } else if (mapOptions.heading < 125) {
-                    mapOptions.heading += 0.5;
-                } else {
-                    renderer.setAnimationLoop(null);
-                }
-            });
-        };
+        // loader.manager.onLoad = () => {
+        //     renderer.setAnimationLoop(() => {
+        //         map.moveCamera({
+        //             tilt: mapOptions.tilt,
+        //             heading: mapOptions.heading,
+        //             zoom: mapOptions.zoom,
+        //         });
+        //         // if (groupObject) {
+        //         //     const currScale =
+        //         //         ((mapOptions.zoom - 6) / (20 - 6)) *
+        //         //             (25 - modelInitialScale) +
+        //         //         modelInitialScale;
+        //         //     // ((90000 - 25) / (6 - 20)) * mapOptions.zoom + 150000;
+        //         //     groupObject.scale.setScalar(currScale);
+        //         // }
+        //         if (mapOptions.tilt < 60) {
+        //             mapOptions.tilt += 0.5;
+        //         } else if (mapOptions.zoom < 20) {
+        //             mapOptions.zoom += 0.05;
+        //         } else if (mapOptions.heading < 125) {
+        //             mapOptions.heading += 0.5;
+        //         } else {
+        //             renderer.setAnimationLoop(null);
+        //         }
+        //     });
+        // };
     };
 
     overlay.onDraw = ({ transformer }) => {
@@ -199,15 +207,15 @@ function createOverlay(map) {
 
 function Map() {
     return (
-      <Wrapper
-        apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
-        // version="beta"
-        // libraries={["marker", "streetView"]}
-        // render={render}
-      >
-        <MyMapComponent />
-      </Wrapper>
+        <Wrapper
+            apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
+            // version="beta"
+            // libraries={["marker", "streetView"]}
+            // render={render}
+        >
+            <MyMapComponent />
+        </Wrapper>
     );
-  }
+}
 
 export default Map;
