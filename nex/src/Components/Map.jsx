@@ -12,7 +12,7 @@ import {
 import { ThreeJSOverlayView } from "@googlemaps/three";
 import "./Map.css";
 
-const initialCenter = { lat: 27.17445, lng: 78.0421 }; // Set a neutral initial center
+const initialCenter = {lat: 41.8902, lng: 12.4922}; // Set a neutral initial center
 // const modelInitialScale = 25;
 
 const mapOptions = {
@@ -63,6 +63,26 @@ const placeInformation = [
         description:
             "The Pyramid of Khafre, located on the Giza Plateau in Egypt, is the second-largest of the Giza Pyramids and is characterized by its distinctive limestone cap and the Great Sphinx guarding its base. Built during the Fourth Dynasty of the Old Kingdom, it is a testament to ancient Egyptian architectural prowess and served as a funerary monument for Pharaoh Khafre",
         imageUrl: "/images/pyramid.jpg", // Replace with the URL of an image for the place
+    },
+    {
+        model: "/big_ben/scene.gltf",
+        modelScale: 11,
+        modelRotation: { x: Math.PI / 2, y: -0.17, z: 0 },
+        modelCoordinates: { lat: 51.50073228968485, lng: -0.12460187286374864 }, 
+        name: "Big Ben",
+        description:
+            "Big Ben refers to the iconic clock tower at the north end of the Palace of Westminster in London. Completed in 1859, it is known for its impressive Gothic architecture and houses the Great Bell, commonly referred to as Big Ben, which chimes the hours",
+        imageUrl: "/images/big_ben.jpg", // Replace with the URL of an image for the place
+    },
+    {
+        model: "/colosseum/scene.gltf",
+        modelScale: 40,
+        modelRotation: { x: Math.PI / 2, y: 0., z: 0 },
+        modelCoordinates: { lat: 41.8902, lng: 12.4922 }, 
+        name: "Colosseum",
+        description:
+            "Big Ben refers to the iconic clock tower at the north end of the Palace of Westminster in London. Completed in 1859, it is known for its impressive Gothic architecture and houses the Great Bell, commonly referred to as Big Ben, which chimes the hours",
+        imageUrl: "/images/colesseum.jpg", // Replace with the URL of an image for the place
     },
 ];
 
