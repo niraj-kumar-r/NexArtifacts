@@ -12,7 +12,9 @@ import {
 import { ThreeJSOverlayView } from "@googlemaps/three";
 import "./Map.css";
 
-const initialCenter = { lat: 41.8902, lng: 12.4922 }; // Set a neutral initial center
+const initialCenter = { lat: 27.1745, lng: 78.0421 }; // Set a neutral initial center
+// const initialCenter = { lat: 17.3616, lng: 78.4747 }; // Set a neutral initial center
+
 // const modelInitialScale = 25;
 
 const mapOptions = {
@@ -86,7 +88,7 @@ function MyMapComponent({ placeInformation }) {
         if (map) {
             const newCenter = new window.google.maps.LatLng(lat, lng);
             map.panTo(newCenter);
-            map.setZoom(600); // Adjust the zoom level as needed (15 is an example)
+            map.setZoom(19); // Adjust the zoom level as needed (15 is an example)
             if (openInfoWindowRef.current) {
                 openInfoWindowRef.current.close();
             }
@@ -98,7 +100,7 @@ function MyMapComponent({ placeInformation }) {
 
 function createOverlay(map, placeInformation) {
     const overlay = new ThreeJSOverlayView({
-        anchor: mapOptions.center,
+        anchor: { lat: 27.1745, lng: 78.0421 },
         map,
     });
 

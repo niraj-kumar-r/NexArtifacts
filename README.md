@@ -31,6 +31,10 @@ Our website utilizes a number of technologies to deliver its features:
 1. **Google Maps API**: This is used for the integration of Google Maps into our website.
 2. **Three.js**: This JavaScript library is used for creating and displaying animated 3D computer graphics in a web browser.
 3. **WebGL**: This JavaScript API is used for rendering high-performance interactive 3D and 2D graphics within any compatible web browser without the use of plug-ins.
+4. **Express.js**: This web application framework for Node.js is used for creating our server.
+5. **Node.js**: This JavaScript runtime environment is used for running our server.
+6. **React.js**: This JavaScript library is used for building our user interface.
+7. **Render.com**: This cloud platform is used for hosting our website.
 
 ## How to Setup
 
